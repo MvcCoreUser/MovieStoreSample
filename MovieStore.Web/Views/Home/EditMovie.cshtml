@@ -1,0 +1,55 @@
+﻿@using MovieStore.BusinessLogic.ViewModels
+@model MovieViewModel
+@{
+    ViewBag.Title = "Редактировать фильм";
+}
+
+@section scripts{
+    
+    }
+
+@section Body{
+
+    <div class="panel panel-default">
+        <div class="panel-heading">@ViewBag.Title</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-10">
+                    @using (Html.BeginForm("EditMovie", "Home", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+                    {
+                        <p>
+                            @Html.ValidationSummary()
+                        </p>
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(m => m.Id)
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Name, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Description, new { @class = "control-label" })
+                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.YearOfProduction, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.YearOfProduction, new { @class = "form-control", type = "number" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Producer, new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.Producer, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Выберите изображение (постер) для фильма</label>
+                            @Html.TextBoxFor(m => m.Poster, new { type = "file", @class = "form-control" })
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                        @Html.ActionLink("Отмена", "Index", "Home", new { @class = "btn btn-warning" })
+                    }
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+}
+

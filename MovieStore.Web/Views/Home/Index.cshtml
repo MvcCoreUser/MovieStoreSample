@@ -1,0 +1,68 @@
+﻿@using MovieStore.BusinessLogic.ViewModels
+
+@{
+    ViewBag.Title = "Список фильмов";
+}
+@section scripts{
+    <script type="text/javascript">
+
+
+        function Search() {
+            grid.reload({ searchString: $("#search").val() });
+        }
+
+        $(document).ready(function () {
+            grid = $("#grid").grid({
+                dataKey: "ID",
+                dataSource: '@Url.Action("GetMovies", "Home")',
+                autoLoad: true,
+                uiLibrary: "bootstrap",
+                columns: [
+                    { field: 'Name', title:'@(MovieViewModel.GetDisplayName<MovieViewModel>(nameof(MovieViewModel.Name)))', width: 128,  sortable: true },
+                    { field: 'Description', title: '@(MovieViewModel.GetDisplayName<MovieViewModel>(nameof(MovieViewModel.Description)))', width: 128, sortable: true },
+                    { field: 'Producer', title: '@(MovieViewModel.GetDisplayName<MovieViewModel>(nameof(MovieViewModel.Producer)))', width: 128, sortable: true },
+                    {
+                        title: '', field: 'Details', width: 34, type: 'icon', icon: 'glyphicon-triangle-right',
+                        events: {
+                            'click': function (e) {
+                                window.open('@Url.Action("MovieDetails", "Home")/' + e.data.id, '_self');
+                            }
+                        }
+                    }
+                ],
+                pager: { enable: true, limit: 5, sizes: [2, 5, 10, 20] }
+            });
+            $("#btnSearch").on("click", Search);
+            grid.on("rowSelect", function (e, $row, id, record) {
+                window.open('@Url.Action("MovieDetails", "Home")/' + record.Id, '_self');;
+            });
+        });
+    </script>
+}
+@section Body{
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">@ViewBag.Title</div>
+        <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control" placeholder="Найти фильм..">
+                        <span class="input-group-btn">
+                            <button type="button" id="btnSearch" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    @Html.ActionLink("Добавить фильм", "AddMovie", "Home", new { @class = "btn btn-default" })
+                </div>
+            </div>
+            <br />
+            <table id="grid" ></table>
+        </div>
+    </div>
+
+
+
+}
