@@ -24,21 +24,7 @@ namespace MovieStore.Web.Controllers
         private IAuthenticationManager AuthenticationManager
             => HttpContext.GetOwinContext().Authentication;
 
-        private async Task SetInitialDataAsync()
-        {
-            await UserService.SetInitialDataAsync(
-                new UserViewModel
-                {
-                    Email = "perekhodko-evgen@mail.ru",
-                    Password = "zaqwsx123.",
-                    Name = "Переходько Евгений Анатольевич",
-                    Phone = "89000000000",
-                    Role = "Admin",
-
-                },
-                new List<string> { "user", "admin" }
-                );
-        }
+       
 
         // GET: Account
         public ActionResult Login()
