@@ -13,6 +13,6 @@ namespace MovieStore.DataAccess.Interfaces
         Task UpdateAsync(Movie movie);
         Task DeleteAsync(int movieId);
         Movie GetMovieById(int movieId);
-        IQueryable<Movie> GetMovies();
+        IQueryable<Movie> GetMovies(int skippedItems=0, int takenItems=0);
     }
 }

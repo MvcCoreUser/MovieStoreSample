@@ -70,30 +70,11 @@ namespace MovieStore.BusinessLogic.Services
             return new OperationResult(true, "Фильм успешно удален");
         }
 
-        public IEnumerable<MovieViewModel> GetAllMovies(int skippedItems = 0, int takenItems = 0)
-        {
-            List<MovieViewModel> res=new List<MovieViewModel>();
-            if (skippedItems==0 && takenItems==0)
-            {
-                Database.MovieManager.GetMovies().ToList().ForEach(m => res.Add(MovieViewModel.FromMovie(m)));
-            }
-            if (skippedItems != 0)
-            {
-                Database.MovieManager.GetMovies().OrderBy(m => m.Id).Skip(skippedItems).ToList().ForEach(m => res.Add(MovieViewModel.FromMovie(m)));
-            }
-            if (takenItems!=0)
-            {
-                Database.MovieManager.GetMovies().OrderBy(m => m.Id).Take(skippedItems).ToList().ForEach(m => res.Add(MovieViewModel.FromMovie(m)));
-            }
-            if (skippedItems != 0 && takenItems != 0)
-            {
-                Database.MovieManager.GetMovies().OrderBy(m=>m.Id).Skip(skippedItems).Take(skippedItems).ToList().ForEach(m => res.Add(MovieViewModel.FromMovie(m)));
-            }
-            return res;
-        }
+        public IEnumerable<MovieViewModel> GetMovies(int skippedItems = 0, int takenItems = 0)
+        => Database.MovieManager.GetMovies(skippedItems, takenItems).ToList().Select(m => MovieViewModel.FromMovie(m));
 
         public IEnumerable<MovieViewModel> GetMoviesByUserId(string UserId, int skippedItems = 0, int takenItems = 0)
-        => GetAllMovies(skippedItems, takenItems).Where(m => m.UserId == UserId);
+        => GetMovies(skippedItems, takenItems).ToList().Where(m => m.UserId == UserId);
 
         public async Task<OperationResult> UpdateAsync(MovieViewModel movieViewModel)
         {

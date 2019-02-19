@@ -177,7 +177,6 @@
     <Compile Include="Infrastructure\MovieStoreConfig.cs" />
     <Compile Include="Infrastructure\NoCacheAttribute.cs" />
     <Compile Include="Infrastructure\ServiceInvoker.cs" />
-    <Compile Include="Infrastructure\SortHelper.cs" />
     <Compile Include="Infrastructure\UserClaims.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

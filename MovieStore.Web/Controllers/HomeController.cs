@@ -29,7 +29,8 @@ namespace MovieStore.Web.Controllers
         public JsonResult GetMovies(int? page, int? limit, string sortBy, string direction, string searchString = null)
         {
             int total;
-            var records = GridHelper.GetMovies(page, limit, sortBy, direction, searchString, out total);
+            List<MovieViewModel> records = GridHelper.GetMovies(page, limit, sortBy, direction, searchString).ToList();
+            total = records.Count;
             return Json(new { records, total }, JsonRequestBehavior.AllowGet);
         }
 

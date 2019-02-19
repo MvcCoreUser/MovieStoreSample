@@ -64,9 +64,26 @@ namespace MovieStore.DataAccess.Repositories
         public Movie GetMovieById(int movieId)
         => Database.Movies.FirstOrDefault(m => m.Id == movieId);
 
-        public IQueryable<Movie> GetMovies()
+        public IQueryable<Movie> GetMovies(int skippedItems = 0, int takenItems = 0)
         {
-            return Database.Movies;
+            IQueryable<Movie> res = null;
+            if (skippedItems != 0 && takenItems != 0)
+            {
+               res= Database.Movies.OrderBy(m => m.Id).Skip(skippedItems).Take(skippedItems);
+            }
+            else if (skippedItems != 0)
+            {
+                res = Database.Movies.OrderBy(m => m.Id).Skip(skippedItems);
+            }
+            else if (takenItems != 0)
+            {
+                res = Database.Movies.OrderBy(m => m.Id).Take(takenItems);
+            }
+            else
+            {
+                res = Database.Movies;
+            }
+            return res;
         }
     }
 }

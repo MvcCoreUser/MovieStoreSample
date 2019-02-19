@@ -15,7 +15,6 @@
             grid = $("#grid").grid({
                 dataKey: "ID",
                 dataSource: '@Url.Action("GetMovies", "Home")',
-                autoLoad: true,
                 uiLibrary: "bootstrap",
                 columns: [
                     { field: 'Name', title:'@(MovieViewModel.GetDisplayName<MovieViewModel>(nameof(MovieViewModel.Name)))', width: 128,  sortable: true },

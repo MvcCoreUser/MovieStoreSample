@@ -10,11 +10,18 @@ namespace MovieStore.Web.Infrastructure
 {
     public static class GridHelper
     {
-        public static List<MovieViewModel> GetMovies(int? page, int? limit, string sortBy, string direction, string searchString, out int total)
+        public static IEnumerable<MovieViewModel> GetMovies(int? page, int? limit, string sortBy, string direction, string searchString)
         {
-
-            var records = ServiceFactory.MovieService.GetAllMovies().AsQueryable();
-            total = records.Count();
+            IEnumerable<MovieViewModel> records = null;
+            if (page.HasValue && limit.HasValue)
+            {
+                int start = (page.Value - 1) * limit.Value;
+                records = ServiceFactory.MovieService.GetMovies(start, limit.Value);
+            }
+            else
+            {
+                records = ServiceFactory.MovieService.GetMovies();
+            }
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 records = records.Where(p => p.Name.Contains(searchString) || p.Description.Contains(searchString) || p.Producer.Contains(searchString));
@@ -24,21 +31,17 @@ namespace MovieStore.Web.Infrastructure
             {
                 if (direction.Trim().ToLower() == "asc")
                 {
-                    records = SortHelper.OrderBy(records, sortBy);
+                    records = records.OrderBy(m=>m.Id);
                 }
                 else
                 {
-                    records = SortHelper.OrderByDescending(records, sortBy);
+                    records = records.OrderByDescending(m=>m.Id);
                 }
             }
 
-            if (page.HasValue && limit.HasValue)
-            {
-                int start = (page.Value - 1) * limit.Value;
-                records = records.Skip(start).Take(limit.Value);
-            }
+           
 
-            return records.ToList();
+            return records;
         }
 
         //public static OperationResult Save(MovieViewModel movieVM)
